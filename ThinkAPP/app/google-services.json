@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "964544724196",
+    "firebase_url": "https://think-57062.firebaseio.com",
+    "project_id": "think-57062",
+    "storage_bucket": "think-57062.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964544724196:android:c2c68e0116f26ca4",
+        "android_client_info": {
+          "package_name": "br.com.ggslmrs.think"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "964544724196-1cmugrfakg6girrauprq9dmfe92rcndf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.ggslmrs.think",
+            "certificate_hash": "60663d7e447596589c279fc89fe97b8d8d35647f"
+          }
+        },
+        {
+          "client_id": "964544724196-npnft70pspiejakt5q5fe4m3rpjqmmqu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnsRFacfke8rwyLoOHBVq7S4skSTafBG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "964544724196-npnft70pspiejakt5q5fe4m3rpjqmmqu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
