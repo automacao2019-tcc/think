@@ -1,7 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-</LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+    >
+
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
+                                                               android:layout_height="wrap_content">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="NOME"
+                    android:layout_margin="15dp"
+                    android:id="@+id/edtUserName"
+            />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
+                                                               android:layout_height="wrap_content">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="EMAIL"
+                    android:layout_margin="15dp"
+                    android:inputType="textEmailAddress"
+                    android:id="@+id/edtUserEmail"
+            />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
+                                                               android:layout_height="wrap_content">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="SENHA"
+                    android:layout_margin="15dp"
+                    android:inputType="textPassword"
+                    android:id="@+id/edtUserSenha"
+            />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradiente"
+            android:text="SALVAR"
+            android:textColor="#FFF"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_margin="15dp"
+            android:id="@+id/btnEditar"
+        />
+
+    </LinearLayout>
+
+</ScrollView>

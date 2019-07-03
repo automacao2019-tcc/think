@@ -1,7 +1,8 @@
-package br.com.ggslmrs.think
+package Activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import br.com.ggslmrs.think.R
 
 class RotinaActivity : AppCompatActivity() {
 

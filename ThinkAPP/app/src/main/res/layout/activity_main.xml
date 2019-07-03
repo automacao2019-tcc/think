@@ -3,14 +3,11 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto"
         android:gravity="center"
-        android:layout_margin="15dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity"
-        android:background="@drawable/gradiente"
+        tools:context="Activity.MainActivity"
+        android:background="@drawable/drawable_gradiente"
 >
-
-
 
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -28,31 +25,47 @@
         >
 
 
-            <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="EMAIL"
-                    android:layout_margin="15dp"
-            />
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
+                                                                   android:layout_height="wrap_content">
 
 
-            <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="SENHA"
-                    android:layout_margin="15dp"
-            />
+                <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="EMAIL"
+                        android:layout_margin="15dp"
+                        android:inputType="textEmailAddress"
+                        android:id="@+id/edtEmail"
+                />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent"
+                                                                   android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="SENHA"
+                        android:layout_margin="15dp"
+                        android:inputType="textPassword"
+                        android:id="@+id/edtSenha"
+                />
+
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/gradiente"
-                    android:shadowRadius="23dp"
                     android:text="LOGIN"
                     android:textColor="#FFF"
                     android:textStyle="bold"
                     android:textSize="17sp"
                     android:layout_margin="15dp"
+                    android:id="@+id/btnEntrar"
             />
 
             <com.facebook.login.widget.LoginButton
@@ -61,14 +74,45 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp" />
+                    android:layout_marginBottom="30dp"
+                    android:visibility="gone"
+            />
 
-            <Button
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="teste"
-                android:id="@+id/btnteste"
+                android:orientation="horizontal"
+                android:gravity="center"
+            >
+
+                <ImageView
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
+                        android:src="@drawable/facebooklogin"
+                        android:id="@+id/btnLoginFacebook"
+                />
+
+                <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:src="@drawable/logingoogle"
+                        android:id="@+id/btnLoginGoogle"
+                />
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Criar uma nova conta"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:id="@+id/novoCadastro"
             />
+
 
         </LinearLayout>
 

@@ -1,18 +1,17 @@
-package br.com.ggslmrs.think.Activity
+package Activity
 
 import DAO.ConfiguracaoFirebase
+import Fragments.FragmentCodigo
+import Helper.MetodoLoginHelper
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import br.com.ggslmrs.think.R
 import com.facebook.*
-import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,8 +28,18 @@ class MainActivity : AppCompatActivity() {
         if(estaLogado)
             abrirTelaPrincipal()
 
+        btnLoginGoogle.setOnClickListener {
+            val fragment = FragmentCodigo()
+            fragment.show(supportFragmentManager, "", MetodoLoginHelper.GOOGLE.name)
+        }
+
+        novoCadastro.setOnClickListener {
+            startActivity(Intent(this, CadastroActivity::class.java))
+        }
+
         btnLoginFacebook.setOnClickListener {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+            val fragment = FragmentCodigo()
+            fragment.show(supportFragmentManager, "", MetodoLoginHelper.FACEBOOK.name)
         }
 
         btnEntrar.setOnClickListener {
@@ -57,8 +66,8 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        callbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun fazerLogin(){
@@ -76,6 +85,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun abrirTelaPrincipal(){
-
+        startActivity(Intent(this, PrincipalActivity ::class.java))
     }
 }

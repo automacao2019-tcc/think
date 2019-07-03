@@ -1,7 +1,7 @@
-package Activity.telas_cadastro
+package Activity
 
-import Activity.PrincipalActivity
 import DAO.ConfiguracaoFirebase
+import Modelos.Codigo
 import Modelos.Usuario
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +12,10 @@ import br.com.ggslmrs.think.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_cadastro.*
 import java.lang.Exception
 
@@ -27,8 +29,36 @@ class CadastroActivity : AppCompatActivity() {
         setContentView(R.layout.activity_cadastro)
 
         btnCadastrar.setOnClickListener {
-            novocadastro()
+            verificaCodigo()
         }
+    }
+
+    private fun verificaCodigo(){
+        val cod = edtCodigoDeSeguranca.text.toString()
+        var valido = false
+
+        reference = ConfiguracaoFirebase.getFirebase()
+
+        reference.child("codigos").orderByChild("codigo").equalTo(cod).addListenerForSingleValueEvent(object : ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot) {
+                for (data in p0.children){
+                    val c = data.getValue(Codigo ::class.java)
+                    if(c != null){
+                        valido = c.codigo.isNotEmpty()
+                    }
+                }
+
+                if(valido)
+                    novocadastro()
+
+                else
+                    Toast.makeText(this@CadastroActivity, "Esse código não é válido", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+        })
     }
 
 
@@ -44,15 +74,12 @@ class CadastroActivity : AppCompatActivity() {
             if(it.isSuccessful){
                 insereUsuario(usuario)
                 finish()
-                //autenticacao.signOut()
             }
 
             else {
                 var erroExcecao = ""
                 try {
                     throw it.exception!!
-                }catch (e : FirebaseAuthWeakPasswordException){
-                    erroExcecao = "Digite uma senha mais forte"
                 }catch (e : FirebaseAuthInvalidCredentialsException){
                     erroExcecao="Digite um email válido0"
                 }catch (e : FirebaseAuthUserCollisionException){
