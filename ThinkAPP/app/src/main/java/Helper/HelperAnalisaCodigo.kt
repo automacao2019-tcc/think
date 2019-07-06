@@ -1,0 +1,4 @@
+package Helper
+
+class HelperAnalisaCodigo {
+}
