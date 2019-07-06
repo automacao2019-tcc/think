@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.ggslmrs.think.R
 import com.google.firebase.auth.FirebaseAuth
@@ -40,37 +39,52 @@ class FragmentPerfil : Fragment() {
     }
 
     private fun buscarUsuario(){
-        val user = FirebaseAuth.getInstance().currentUser!!.email
+        loading.showDialog(fragmentManager!!)
+        try{
+            val user = FirebaseAuth.getInstance().currentUser!!.email
 
-        firebase.child("usuario").orderByChild("email").equalTo(user)
-            .addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onDataChange(p0: DataSnapshot) {
+            firebase.child("usuario").orderByChild("email").equalTo(user)
+                .addListenerForSingleValueEvent(object : ValueEventListener{
+                    override fun onDataChange(p0: DataSnapshot) {
 
-                for(data in p0.children){
-                    val usuario = data.getValue(Usuario ::class.java)
-                    if(usuario != null){
-                        preencherUsuario(usuario)
-                        usuario_ = data.key!!
+                        for(data in p0.children){
+                            val usuario = data.getValue(Usuario ::class.java)
+                            if(usuario != null){
+                                preencherUsuario(usuario)
+                                usuario_ = data.key!!
+                            }
+
+                            else{
+                                loading.dismissDialog()
+                                ErroBD.showDialogErro(fragmentManager!!, "Erro ao buscar usuário")
+                            }
+                        }
                     }
 
-                    else
-                        Toast.makeText(context, "Usuario nulo", Toast.LENGTH_SHORT).show()
-                }
-            }
+                    override fun onCancelled(p0: DatabaseError) {
+                        loading.dismissDialog()
+                        ErroBD.showDialogErro(fragmentManager!!, "Erro ao buscar usuário")
+                    }
 
-            override fun onCancelled(p0: DatabaseError) {
-                Toast.makeText(context, "Erro ao buscar usuário", Toast.LENGTH_SHORT).show()
-            }
-        })
+                })
+
+        }catch (e:java.lang.Exception){
+            loading.dismissDialog()
+           ErroBD.showDialogErro(fragmentManager!!, "Erro ao buscar perfil")
+        }
+
     }
 
     private fun preencherUsuario(usuario: Usuario){
         edtUserEmail.setText(usuario.email)
         edtUserName.setText(usuario.nome)
         edtUserSenha.setText(usuario.senha)
+
+        loading.dismissDialog()
     }
 
     private fun editar(){
+        loading.showDialog(fragmentManager!!)
         val usuario = Usuario()
 
         usuario.nome = edtUserName.text.toString()
@@ -78,12 +92,20 @@ class FragmentPerfil : Fragment() {
         usuario.email = edtUserEmail.text.toString()
 
         try{
-            firebase.child("usuario").child(usuario_).setValue(usuario)
+            firebase.child("usuario").child(usuario_).setValue(usuario).addOnCompleteListener {
+                if(!it.isSuccessful){
+                    loading.dismissDialog()
+                    ErroBD.showDialogErro(fragmentManager!!, "Erro ao editar usuário")
+                }
+                else
+                    loading.dismissDialog()
+
+
+            }
         }
         catch (e:Exception){
-            Toast.makeText(context, "Erro ao atualizar", Toast.LENGTH_SHORT).show()
+            loading.dismissDialog()
+            ErroBD.showDialogErro(fragmentManager!!, e.toString())
         }
-
-
     }
 }

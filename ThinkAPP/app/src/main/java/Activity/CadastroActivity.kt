@@ -1,6 +1,8 @@
 package Activity
 
 import DAO.ConfiguracaoFirebase
+import Fragments.ErroBD
+import Fragments.loading
 import Modelos.Codigo
 import Modelos.Usuario
 import android.content.Intent
@@ -34,6 +36,8 @@ class CadastroActivity : AppCompatActivity() {
     }
 
     private fun verificaCodigo(){
+        loading.showDialog(supportFragmentManager)
+
         val cod = edtCodigoDeSeguranca.text.toString().toUpperCase()
         var valido = false
 
@@ -51,8 +55,10 @@ class CadastroActivity : AppCompatActivity() {
                 if(valido)
                     novocadastro()
 
-                else
-                    Toast.makeText(this@CadastroActivity, "Esse código não é válido", Toast.LENGTH_SHORT).show()
+                else{
+                    loading.dismissDialog()
+                    ErroBD.showDialogErro(supportFragmentManager, "Esse código não é válido")
+                }
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -88,7 +94,8 @@ class CadastroActivity : AppCompatActivity() {
                     erroExcecao = "Erro: $e"
                     Log.v("Erro: ", e.toString())
                 }
-                Toast.makeText(this, erroExcecao, Toast.LENGTH_LONG).show()
+                loading.dismissDialog()
+                ErroBD.showDialogErro(supportFragmentManager, erroExcecao)
             }
         }
     }
@@ -98,12 +105,13 @@ class CadastroActivity : AppCompatActivity() {
             reference = ConfiguracaoFirebase.getFirebase().child("usuario")
             reference.push().setValue(usuario)
 
-            Toast.makeText(this, "Usuário cadastrado", Toast.LENGTH_SHORT).show()
             startActivity(Intent(this, PrincipalActivity ::class.java))
 
+            loading.dismissDialog()
+
         }catch (e: Exception){
-            Toast.makeText(this, "Erro ao cadastrar", Toast.LENGTH_SHORT).show()
-            Log.v("Erro: ", e.toString())
+            loading.dismissDialog()
+            ErroBD.showDialogErro(supportFragmentManager, "Não foi possível inserir usuário")
         }
     }
 }

@@ -7,11 +7,9 @@ import Helper.MetodoLoginHelper
 import Modelos.Codigo
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import br.com.ggslmrs.think.R
@@ -52,6 +50,7 @@ class FragmentCodigo: DialogFragment() {
         googleSignInClient = GoogleSignIn.getClient(context!!, gso)
 
         btnValidar.setOnClickListener {
+            loading.showDialog(fragmentManager!!)
             validar(edtCodigoDeSegurancaInsr.text.toString().toUpperCase())
         }
     }
@@ -74,17 +73,22 @@ class FragmentCodigo: DialogFragment() {
 
                 if(estaValidado)
                     fazerLogin()
-                else
-                    Toast.makeText(context, "Esse código não é válido", Toast.LENGTH_SHORT).show()
+                else{
+                    loading.dismissDialog()
+                    ErroBD.showDialogErro(fragmentManager!!, "Esse código não é válido")
+                }
+
+
             }
 
             override fun onCancelled(p0: DatabaseError) {
-
+                loading.dismissDialog()
             }
         })
     }
 
     private fun fazerLogin(){
+        loading.dismissDialog()
         if(metodoLogin.equals(MetodoLoginHelper.FACEBOOK.name))
             abrirTelaPrincipal()
         else{
@@ -111,8 +115,8 @@ class FragmentCodigo: DialogFragment() {
                     logarComGoogle(account)
 
             }catch (e: Exception){
-                Log.e("ErroLogin", e.toString())
-                Toast.makeText(context, "Não foi possível fazer o login com sua conta do google", Toast.LENGTH_SHORT).show()
+                loading.dismissDialog()
+                ErroBD.showDialogErro(fragmentManager!!, "Não foi possível fazer o login com sua conta do google")
             }
         }
     }
@@ -122,12 +126,15 @@ class FragmentCodigo: DialogFragment() {
         autenticacao.signInWithCredential(credential).addOnCompleteListener {
             if(it.isSuccessful)
                 abrirTelaPrincipal()
-            else
-                Toast.makeText(context, "Não foi possível efetuar o login pela sua conta do google", Toast.LENGTH_SHORT).show()
+            else{
+                loading.dismissDialog()
+                ErroBD.showDialogErro(fragmentManager!!, "Não foi possível fazer o login com sua conta do google")
+            }
         }
     }
 
     private fun abrirTelaPrincipal(){
+        loading.dismissDialog()
         startActivity(Intent(context, PrincipalActivity ::class.java))
     }
 }

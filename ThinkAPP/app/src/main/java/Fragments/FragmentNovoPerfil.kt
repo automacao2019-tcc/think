@@ -15,10 +15,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import br.com.ggslmrs.think.R
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_novo_perfil.*
 import kotlin.random.Random
 
@@ -42,15 +39,21 @@ class FragmentNovoPerfil : Fragment() {
 
     private fun convidarUsuario(){
         try {
+            loading.showDialog(fragmentManager!!)
             val codigo = Codigo()
             codigo.milissegundos = System.currentTimeMillis()
             codigo.codigo = gerarCod()
 
             HelperAnalisaCodigo.analisaCodigos()
 
-            reference.child("codigos").push().setValue(codigo)
-
-            mandarSMS(codigo.codigo)
+            reference.child("codigos").push().setValue(codigo).addOnCompleteListener {
+                if(it.isSuccessful)
+                    mandarSMS(codigo.codigo)
+                else {
+                    loading.dismissDialog()
+                    ErroBD.showDialogErro(fragmentManager!!, "Erro ao gerar código")
+                }
+            }
 
 
         }catch (e:Exception){
@@ -86,7 +89,9 @@ class FragmentNovoPerfil : Fragment() {
             else
                 PermissionsHelper.requisitaPermissao(context as Activity, Manifest.permission.SEND_SMS)
 
-            Toast.makeText(context, "SMS enviado com o código", Toast.LENGTH_SHORT).show()
+            loading.dismissDialog()
+            ErroBD.showDialogErro(fragmentManager!!, "SMS enviado")
+
         }catch (e : Exception) {
             Log.e("Erro", e.toString())
         }

@@ -1,12 +1,13 @@
 package Activity
 
 import DAO.ConfiguracaoFirebase
+import Fragments.ErroBD
 import Fragments.FragmentCodigo
+import Fragments.loading
 import Helper.MetodoLoginHelper
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import br.com.ggslmrs.think.R
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -57,11 +58,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onCancel() {
-
+                loading.dismissDialog()
             }
 
             override fun onError(exception: FacebookException) {
-                Toast.makeText(baseContext, "Login não pode ser efetuado com sucesso", Toast.LENGTH_SHORT).show()
+                loading.dismissDialog()
+                ErroBD.showDialogErro(supportFragmentManager, exception.toString())
             }
         })
     }
@@ -73,6 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fazerLogin(){
+        loading.showDialog(supportFragmentManager)
         if(!edtEmail.text.toString().equals("") && !edtSenha.text.toString().equals("")){
             autenticacao = ConfiguracaoFirebase.getFirebaseAuth()
             autenticacao.signInWithEmailAndPassword(edtEmail.text.toString(), edtSenha.text.toString()).addOnCompleteListener {
@@ -80,13 +83,16 @@ class MainActivity : AppCompatActivity() {
                 if(task.isSuccessful)
                     abrirTelaPrincipal()
 
-                else
-                    Toast.makeText(this, "Usuário ou senha inválidos", Toast.LENGTH_SHORT).show()
+                else{
+                    loading.dismissDialog()
+                    ErroBD.showDialogErro(supportFragmentManager, "Não é possível fazer login")
+                }
             }
         }
     }
 
     private fun abrirTelaPrincipal(){
+        loading.dismissDialog()
         startActivity(Intent(this, PrincipalActivity ::class.java))
     }
 }
