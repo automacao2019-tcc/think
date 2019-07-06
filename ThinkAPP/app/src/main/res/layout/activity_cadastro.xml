@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:background="#000"
             android:layout_margin="15dp"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="10dp"
     >
 
         <LinearLayout
@@ -78,7 +78,6 @@
                         android:layout_height="wrap_content"
                         android:hint="CÓDIGO DE SEGURANÇA"
                         android:layout_margin="15dp"
-                        android:inputType="textPassword"
                         android:id="@+id/edtCodigoDeSeguranca"
                 />
 

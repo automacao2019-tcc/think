@@ -2,6 +2,7 @@ package Fragments
 
 import Activity.PrincipalActivity
 import DAO.ConfiguracaoFirebase
+import Helper.HelperAnalisaCodigo
 import Helper.MetodoLoginHelper
 import Modelos.Codigo
 import android.content.Intent
@@ -11,11 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.contentValuesOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import br.com.ggslmrs.think.R
-import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -29,7 +28,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_codigo.*
 import java.lang.Exception
-import java.util.*
 
 class FragmentCodigo: DialogFragment() {
 
@@ -54,7 +52,7 @@ class FragmentCodigo: DialogFragment() {
         googleSignInClient = GoogleSignIn.getClient(context!!, gso)
 
         btnValidar.setOnClickListener {
-            validar(edtCodigoDeSegurancaInsr.text.toString())
+            validar(edtCodigoDeSegurancaInsr.text.toString().toUpperCase())
         }
     }
 
@@ -65,6 +63,8 @@ class FragmentCodigo: DialogFragment() {
 
         firebase.child("codigos").orderByChild("codigo").equalTo(codigo).addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
+                HelperAnalisaCodigo.analisaCodigos()
+
                 for(data in p0.children){
                     if(data != null){
                         cod = data.getValue(Codigo ::class.java) as Codigo
@@ -86,7 +86,7 @@ class FragmentCodigo: DialogFragment() {
 
     private fun fazerLogin(){
         if(metodoLogin.equals(MetodoLoginHelper.FACEBOOK.name))
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"))
+            abrirTelaPrincipal()
         else{
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)

@@ -1,6 +1,7 @@
 package Fragments
 
 import DAO.ConfiguracaoFirebase
+import Helper.HelperAnalisaCodigo
 import Helper.PermissionsHelper
 import Modelos.Codigo
 import android.Manifest
@@ -45,24 +46,7 @@ class FragmentNovoPerfil : Fragment() {
             codigo.milissegundos = System.currentTimeMillis()
             codigo.codigo = gerarCod()
 
-            reference.child("codigos").addListenerForSingleValueEvent(object : ValueEventListener {
-
-                override fun onDataChange(data: DataSnapshot) {
-                    for(d in data.children){
-                        val cod = d.getValue(codigo ::class.java)
-
-                        if(cod != null){
-                            if((codigo.milissegundos - cod.milissegundos) > (8.64 * (Math.pow(10.0, 7.0)))){
-                                   reference.child("codigos").child(d.key!!).removeValue()
-                            }
-                        }
-                    }
-                }
-
-                override fun onCancelled(data: DatabaseError) {
-                    Toast.makeText(context, "Não foi apagado nenhum registro", Toast.LENGTH_SHORT).show()
-                }
-            })
+            HelperAnalisaCodigo.analisaCodigos()
 
             reference.child("codigos").push().setValue(codigo)
 

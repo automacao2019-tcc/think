@@ -34,7 +34,7 @@ class CadastroActivity : AppCompatActivity() {
     }
 
     private fun verificaCodigo(){
-        val cod = edtCodigoDeSeguranca.text.toString()
+        val cod = edtCodigoDeSeguranca.text.toString().toUpperCase()
         var valido = false
 
         reference = ConfiguracaoFirebase.getFirebase()

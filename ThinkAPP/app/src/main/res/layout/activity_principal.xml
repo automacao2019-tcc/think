@@ -11,21 +11,21 @@
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000"
-        app:cardCornerRadius="20dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="110dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000"
+            app:cardCornerRadius="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="110dp"
     >
 
         <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/exibiFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/exibiFragment"
         >
 
 
@@ -35,9 +35,9 @@
 
 
     <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
     >
 
         <LinearLayout
@@ -48,11 +48,11 @@
 
             <androidx.cardview.widget.CardView
                     android:id="@+id/home"
-                    android:layout_width="80dp"
+                    android:layout_width="100dp"
                     android:layout_height="80dp"
                     android:background="#000"
                     android:layout_margin="15dp"
-                    app:cardCornerRadius="20dp"
+                    app:cardCornerRadius="10dp"
             >
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -82,11 +82,11 @@
 
             <androidx.cardview.widget.CardView
                     android:id="@+id/rotinas"
-                    android:layout_width="80dp"
+                    android:layout_width="100dp"
                     android:layout_height="80dp"
                     android:background="#000"
                     android:layout_margin="15dp"
-                    app:cardCornerRadius="20dp"
+                    app:cardCornerRadius="10dp"
 
             >
                 <LinearLayout
@@ -117,11 +117,11 @@
 
             <androidx.cardview.widget.CardView
                     android:id="@+id/perfil"
-                    android:layout_width="80dp"
+                    android:layout_width="100dp"
                     android:layout_height="80dp"
                     android:background="#000"
                     android:layout_margin="15dp"
-                    app:cardCornerRadius="20dp"
+                    app:cardCornerRadius="10dp"
 
             >
 
@@ -152,11 +152,11 @@
 
             <androidx.cardview.widget.CardView
                     android:id="@+id/novoUsuario"
-                    android:layout_width="80dp"
+                    android:layout_width="100dp"
                     android:layout_height="80dp"
                     android:background="#000"
                     android:layout_margin="15dp"
-                    app:cardCornerRadius="20dp"
+                    app:cardCornerRadius="10dp"
 
             >
 
@@ -187,11 +187,11 @@
 
             <androidx.cardview.widget.CardView
                     android:id="@+id/configuracoes"
-                    android:layout_width="80dp"
+                    android:layout_width="100dp"
                     android:layout_height="80dp"
                     android:background="#000"
                     android:layout_margin="15dp"
-                    app:cardCornerRadius="20dp"
+                    app:cardCornerRadius="10dp"
 
             >
 
@@ -224,6 +224,7 @@
         </LinearLayout>
 
     </HorizontalScrollView>
+
 
 
 </RelativeLayout>

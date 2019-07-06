@@ -9,9 +9,11 @@ import android.os.Bundle
 import android.widget.Toast
 import br.com.ggslmrs.think.R
 import com.facebook.*
+import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,8 +40,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnLoginFacebook.setOnClickListener {
-            val fragment = FragmentCodigo()
-            fragment.show(supportFragmentManager, "", MetodoLoginHelper.FACEBOOK.name)
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"))
         }
 
         btnEntrar.setOnClickListener {
@@ -51,7 +52,8 @@ class MainActivity : AppCompatActivity() {
         //retorna se o login foi efetuado ou não
         button_login_facebook.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(loginResult: LoginResult) {
-                abrirTelaPrincipal()
+                val fragment = FragmentCodigo()
+                fragment.show(supportFragmentManager, "", MetodoLoginHelper.FACEBOOK.name)
             }
 
             override fun onCancel() {
