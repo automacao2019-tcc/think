@@ -7,4 +7,5 @@ class Usuario {
     lateinit var email: String
     @Exclude
     lateinit var senha: String
+    lateinit var casa: String
 }

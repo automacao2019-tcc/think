@@ -7,19 +7,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import Activity.ComodoActivity
+import DAO.BD
+import DAO.ConfiguracaoFirebase
 import Helper.comodoHelper
 
 import br.com.ggslmrs.think.R
+import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.fragment_fragment_home.*
 
 
 class FragmentHome: Fragment() {
+
+    private lateinit var firebase: DatabaseReference
+    private lateinit var helper: BD
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        firebase = ConfiguracaoFirebase.getFirebase()
+        helper = BD(context!!)
+
+        obtemComodos()
 
         comodo_area.setOnClickListener {
             abriComodo(comodoHelper.AREA.name)
@@ -42,5 +52,10 @@ class FragmentHome: Fragment() {
         val intent = Intent(activity, ComodoActivity::class.java)
         intent.putExtra("comodo", comodo)
         startActivity(intent)
+    }
+
+    private fun obtemComodos(){
+        helper.writableDatabase
+
     }
 }

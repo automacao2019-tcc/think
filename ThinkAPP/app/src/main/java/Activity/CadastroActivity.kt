@@ -9,7 +9,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import br.com.ggslmrs.think.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -25,6 +24,7 @@ class CadastroActivity : AppCompatActivity() {
 
     private lateinit var autenticacao : FirebaseAuth
     private lateinit var reference: DatabaseReference
+    private lateinit var casa : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +49,7 @@ class CadastroActivity : AppCompatActivity() {
                     val c = data.getValue(Codigo ::class.java)
                     if(c != null){
                         valido = c.codigo.isNotEmpty()
+                        casa = c.casa
                     }
                 }
 
@@ -73,7 +74,7 @@ class CadastroActivity : AppCompatActivity() {
         usuario.email = edtCadastroEmail.text.toString()
         usuario.senha = edtCadastroSenha.text.toString()
         usuario.nome = edtCadastroNome.text.toString()
-
+        usuario.casa = this.casa
 
         autenticacao = ConfiguracaoFirebase.getFirebaseAuth()
         autenticacao.createUserWithEmailAndPassword(usuario.email, usuario.senha).addOnCompleteListener (this) {
@@ -87,7 +88,7 @@ class CadastroActivity : AppCompatActivity() {
                 try {
                     throw it.exception!!
                 }catch (e : FirebaseAuthInvalidCredentialsException){
-                    erroExcecao="Digite um email válido0"
+                    erroExcecao="Digite um email válido"
                 }catch (e : FirebaseAuthUserCollisionException){
                     erroExcecao="Esse email já está cadastrado"
                 }catch (e : Exception){

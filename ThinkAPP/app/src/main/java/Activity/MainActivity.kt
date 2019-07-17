@@ -1,5 +1,6 @@
 package Activity
 
+import DAO.BD
 import DAO.ConfiguracaoFirebase
 import Fragments.ErroBD
 import Fragments.FragmentCodigo
@@ -20,6 +21,12 @@ class MainActivity : AppCompatActivity() {
 
     private var callbackManager = CallbackManager.Factory.create()
     private lateinit var autenticacao : FirebaseAuth
+    private lateinit var helper: BD
+
+    override fun onResume() {
+        super.onResume()
+        this.helper = BD(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

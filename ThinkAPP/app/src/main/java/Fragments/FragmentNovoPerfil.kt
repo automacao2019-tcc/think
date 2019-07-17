@@ -2,6 +2,7 @@ package Fragments
 
 import DAO.ConfiguracaoFirebase
 import Helper.HelperAnalisaCodigo
+import Helper.HelperRetornaCasaUsuario
 import Helper.PermissionsHelper
 import Modelos.Codigo
 import android.Manifest
@@ -43,6 +44,7 @@ class FragmentNovoPerfil : Fragment() {
             val codigo = Codigo()
             codigo.milissegundos = System.currentTimeMillis()
             codigo.codigo = gerarCod()
+            codigo.casa = HelperRetornaCasaUsuario.getCasaUser()
 
             HelperAnalisaCodigo.analisaCodigos()
 

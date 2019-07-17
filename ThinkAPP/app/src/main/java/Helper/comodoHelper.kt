@@ -4,5 +4,7 @@ enum class comodoHelper {
     QUARTO,
     SALA,
     COZINHA,
-    AREA
+    AREA,
+    COPA,
+    BANHEIRO
 }
