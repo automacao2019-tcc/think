@@ -116,41 +116,6 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                    android:id="@+id/perfil"
-                    android:layout_width="100dp"
-                    android:layout_height="80dp"
-                    android:background="#000"
-                    android:layout_margin="15dp"
-                    app:cardCornerRadius="5dp"
-
-            >
-
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                >
-
-                    <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/ic_profile"
-                    />
-
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="PERFIL"
-                            android:textSize="15dp"
-                    />
-
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
                     android:id="@+id/novoUsuario"
                     android:layout_width="100dp"
                     android:layout_height="80dp"

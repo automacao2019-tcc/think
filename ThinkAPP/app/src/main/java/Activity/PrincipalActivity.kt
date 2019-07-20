@@ -22,6 +22,7 @@ class PrincipalActivity : AppCompatActivity() {
     private lateinit var firebase: DatabaseReference
     private lateinit var autenticacao: FirebaseAuth
     private lateinit var helper : BD
+    private lateinit var key : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +30,7 @@ class PrincipalActivity : AppCompatActivity() {
 
         home.setOnClickListener {
             val ft = fm.beginTransaction()
-            ft.replace(R.id.exibiFragment, FragmentHome())
+            ft.replace(R.id.exibiFragment, FragmentHome(this.key))
             ft.commit()
         }
 
@@ -39,11 +40,11 @@ class PrincipalActivity : AppCompatActivity() {
             ft.commit()
         }
 
-        perfil.setOnClickListener {
+        /*perfil.setOnClickListener {
             val ft = fm.beginTransaction()
             ft.replace(R.id.exibiFragment, FragmentPerfil())
             ft.commit()
-        }
+        }*/
 
         novoUsuario.setOnClickListener {
             val ft = fm.beginTransaction()
@@ -62,6 +63,7 @@ class PrincipalActivity : AppCompatActivity() {
         super.onResume()
         autenticacao = ConfiguracaoFirebase.getFirebaseAuth()
         firebase = ConfiguracaoFirebase.getFirebase()
+        helper = BD(this)
 
         buscarUsuario()
     }
@@ -96,13 +98,15 @@ class PrincipalActivity : AppCompatActivity() {
 
     private fun buscarCasa(casaKey:String){
         var casa : Casa
+        this.key = casaKey
 
-        firebase.child("casa").orderByKey().equalTo(casaKey).addListenerForSingleValueEvent(object : ValueEventListener{
+        firebase.child("casa").orderByKey().addValueEventListener(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
                 for(data in p0.children){
-                    casa = data.getValue(Casa ::class.java) as Casa
-
-                    gravaCasaBD(casa, casaKey)
+                    if(data.key!!.contains(casaKey)){
+                        casa = data.getValue(Casa ::class.java) as Casa
+                        gravaCasaBD(casa, casaKey)
+                    }
                 }
 
                 loading.dismissDialog()
