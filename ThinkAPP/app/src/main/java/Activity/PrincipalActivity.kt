@@ -3,6 +3,7 @@ package Activity
 import DAO.BD
 import DAO.ConfiguracaoFirebase
 import Fragments.*
+import Helper.BluetoothHelper
 import Modelos.Casa
 import Modelos.Usuario
 import android.content.ContentValues
@@ -124,7 +125,6 @@ class PrincipalActivity : AppCompatActivity() {
 
         else
             novaCasa(casa, key)
-
     }
 
     private fun getCasa(key: String) : Boolean{
@@ -158,7 +158,12 @@ class PrincipalActivity : AppCompatActivity() {
 
         if(resultado.toInt() == -1)
             ErroBD.showDialogErro(fm, "Erro ao salvar casa")
+
+        listarBluetooth()
     }
 
-
+    private fun listarBluetooth() {
+        val b = BluetoothHelper(supportFragmentManager)
+        b.onReceive(baseContext, intent)
+    }
 }

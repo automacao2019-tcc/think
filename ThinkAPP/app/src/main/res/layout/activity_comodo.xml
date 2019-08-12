@@ -106,6 +106,7 @@
                                     android:text="Apagar"
                                     android:layout_margin="5dp"
                                     android:textColor="@color/textviewlink"
+                                    android:id="@+id/apagar"
                             />
                         </LinearLayout>
 

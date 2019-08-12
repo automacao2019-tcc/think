@@ -10,13 +10,9 @@ import Activity.ComodoActivity
 import DAO.BD
 import DAO.ConfiguracaoFirebase
 import Helper.comodoHelper
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.graphics.drawable.toDrawable
 
 import br.com.ggslmrs.think.R
 import com.google.firebase.database.DatabaseReference
-import kotlinx.android.synthetic.main.card_view.*
 import kotlinx.android.synthetic.main.fragment_fragment_home.*
 import org.json.JSONObject
 import kotlin.collections.ArrayList
@@ -44,7 +40,7 @@ class FragmentHome(key: String): Fragment() {
         val map = obtemComodos()
 
 
-        /*for (i in 0..map.size){
+        /*for (i in  0 until map.size){
             val comodo = map[i]
 
             if(comodo.containsKey(comodoHelper.AREA.name)){
@@ -187,7 +183,7 @@ class FragmentHome(key: String): Fragment() {
         return arr
     }
 
-    private fun convertToMap(comodo: JSONObject) : HashMap<String, String>{
+    private fun convertToMap(comodo: JSONObject) : HashMap<String, String> {
         val map = HashMap<String, String>()
         val keys = comodo.keys()
 
