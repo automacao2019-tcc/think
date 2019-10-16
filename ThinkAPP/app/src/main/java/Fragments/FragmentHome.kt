@@ -9,7 +9,11 @@ import android.view.ViewGroup
 import Activity.ComodoActivity
 import DAO.BD
 import DAO.ConfiguracaoFirebase
+import Helper.BluetoothSerialService
 import Helper.comodoHelper
+import android.app.Activity
+import android.util.Log
+import androidx.fragment.app.FragmentManager
 
 import br.com.ggslmrs.think.R
 import com.google.firebase.database.DatabaseReference
@@ -19,15 +23,11 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-class FragmentHome(key: String): Fragment() {
+class FragmentHome: Fragment() {
 
     private lateinit var firebase: DatabaseReference
     private lateinit var helper: BD
-    private var key: String
-
-    init {
-        this.key = key
-    }
+    private var service : BluetoothSerialService? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_fragment_home, container, false)
@@ -37,127 +37,44 @@ class FragmentHome(key: String): Fragment() {
         firebase = ConfiguracaoFirebase.getFirebase()
         helper = BD(context!!)
 
-        val map = obtemComodos()
-
-
-        /*for (i in  0 until map.size){
-            val comodo = map[i]
-
-            if(comodo.containsKey(comodoHelper.AREA.name)){
-                val card = view_card
-                card.setOnClickListener {
-                    abriComodo(comodoHelper.AREA.name)
-                }
-
-                val icone = card.getChildAt(R.id.icone_comodo) as ImageView
-                val descricao = card.getChildAt(R.id.descricao_comodo) as TextView
-
-                icone.setImageDrawable(R.drawable.ic_area.toDrawable())
-                descricao.text = comodoHelper.AREA.name
-
-                layoutComodos.addView(card)
-            }
-
-            else if(comodo.containsKey(comodoHelper.COZINHA.name)){
-                val card = view_card
-                card.setOnClickListener {
-                    abriComodo(comodoHelper.COZINHA.name)
-                }
-
-                val icone = card.getChildAt(R.id.icone_comodo) as ImageView
-                val descricao = card.getChildAt(R.id.descricao_comodo) as TextView
-
-                icone.setImageDrawable(R.drawable.ic_cozinha.toDrawable())
-                descricao.text = comodoHelper.COZINHA.name
-
-                layoutComodos.addView(card)
-            }
-
-            else if(comodo.containsKey(comodoHelper.QUARTO.name)){
-                val card = view_card
-                card.setOnClickListener {
-                    abriComodo(comodoHelper.QUARTO.name)
-                }
-
-                val icone = card.getChildAt(R.id.icone_comodo) as ImageView
-                val descricao = card.getChildAt(R.id.descricao_comodo) as TextView
-
-                icone.setImageDrawable(R.drawable.ic_quarto.toDrawable())
-                descricao.text = comodoHelper.QUARTO.name
-
-                layoutComodos.addView(card)
-            }
-
-            else if(comodo.containsKey(comodoHelper.SALA.name)){
-                val card = view_card
-                card.setOnClickListener {
-                    abriComodo(comodoHelper.SALA.name)
-                }
-
-                val icone = card.getChildAt(R.id.icone_comodo) as ImageView
-                val descricao = card.getChildAt(R.id.descricao_comodo) as TextView
-
-                icone.setImageDrawable(R.drawable.ic_sala.toDrawable())
-                descricao.text = comodoHelper.SALA.name
-
-                layoutComodos.addView(card)
-            }
-
-            else if(comodo.containsKey(comodoHelper.COPA.name)){
-                val card = view_card
-                card.setOnClickListener {
-                    abriComodo(comodoHelper.COPA.name)
-                }
-
-                val icone = card.getChildAt(R.id.icone_comodo) as ImageView
-                val descricao = card.getChildAt(R.id.descricao_comodo) as TextView
-
-                icone.setImageDrawable(R.drawable.ic_copa.toDrawable())
-                descricao.text = comodoHelper.COPA.name
-
-                layoutComodos.addView(card)
-            }
-
-            else if(comodo.containsKey(comodoHelper.BANHEIRO.name)){
-                val card = view_card
-                card.setOnClickListener {
-                    abriComodo(comodoHelper.BANHEIRO.name)
-                }
-
-                val icone = card.getChildAt(R.id.icone_comodo) as ImageView
-                val descricao = card.getChildAt(R.id.descricao_comodo) as TextView
-
-                icone.setImageDrawable(R.drawable.ic_banheiro.toDrawable())
-                descricao.text = comodoHelper.BANHEIRO.name
-
-                layoutComodos.addView(card)
-            }
-        }*/
-
-        comodo_area.setOnClickListener {
-            abriComodo(comodoHelper.AREA.name)
-        }
+        //val map = obtemComodos()
 
         comodo_cozinha.setOnClickListener {
-            abriComodo(comodoHelper.COZINHA.name)
+            abriComodo(comodoHelper.COZINHA.name, false)
         }
 
-        comodo_quarto.setOnClickListener {
-            abriComodo(comodoHelper.QUARTO.name)
+        comodo_quarto_1.setOnClickListener {
+            abriComodo(comodoHelper.QUARTO.name, false)
+        }
+
+        comodo_quarto_2.setOnClickListener {
+            abriComodo(comodoHelper.QUARTO.name, true)
         }
 
         comodo_sala.setOnClickListener {
-            abriComodo(comodoHelper.SALA.name)
+            abriComodo(comodoHelper.SALA.name, false)
+        }
+
+        comodo_banheiro_1.setOnClickListener {
+            abriComodo(comodoHelper.BANHEIRO.name, false)
+        }
+
+        comodo_banheiro_2.setOnClickListener {
+            abriComodo(comodoHelper.BANHEIRO.name, true)
         }
     }
 
-    private fun abriComodo(comodo: String){
-        val intent = Intent(activity, ComodoActivity::class.java)
+    private fun abriComodo(comodo: String, isSecond : Boolean){
+        /*val intent = Intent(activity, ComodoActivity::class.java)
         intent.putExtra("comodo", comodo)
-        startActivity(intent)
+        intent.putExtra("segundo", isSecond)
+        if(service != null)
+            intent.putExtra("service", service)
+        startActivityForResult(intent, BluetoothSerialService.REQUEST_CODE_FOR_INTENT)*/
+        ComodoActivity.build(service, isSecond, comodo, fragmentManager)
     }
 
-    private fun obtemComodos() : ArrayList<HashMap<String, String>> {
+    /*private fun obtemComodos() : ArrayList<HashMap<String, String>> {
         val db = helper.readableDatabase
         val cursor = db.rawQuery("select *from casa where uuid = ?", arrayOf(this.key))
         cursor.moveToFirst()
@@ -193,5 +110,20 @@ class FragmentHome(key: String): Fragment() {
         }
 
         return map
+    }*/
+
+    companion object {
+        private val instance = FragmentHome()
+        private fun getInstance() = instance
+
+        fun build(service : BluetoothSerialService?, fm : FragmentManager?){
+            with(getInstance()){
+                this.service = service
+
+                val ft = fm?.beginTransaction()
+                ft?.replace(R.id.exibiFragment, this)
+                ft?.commit()
+            }
+        }
     }
 }

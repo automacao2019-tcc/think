@@ -4,10 +4,14 @@ import DAO.BD
 import DAO.ConfiguracaoFirebase
 import Fragments.*
 import Helper.BluetoothHelper
+import Helper.BluetoothSerialService
 import Modelos.Casa
 import Modelos.Usuario
+import android.bluetooth.BluetoothAdapter
 import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import br.com.ggslmrs.think.R
 import com.google.firebase.auth.FirebaseAuth
@@ -24,15 +28,31 @@ class PrincipalActivity : AppCompatActivity() {
     private lateinit var autenticacao: FirebaseAuth
     private lateinit var helper : BD
     private lateinit var key : String
+    private val BT_ACTIVATE = 101
+    private val BT_VISIBILITY = 102
+    var servie: BluetoothSerialService? = null
+    var state = BluetoothSerialService.STATE_NONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_principal)
 
+        if(servie == null){
+            listarBluetoothsPareados()
+
+            if(BluetoothHelper.getDefaultAdapter() == null)
+                ErroBD.showDialogErro(supportFragmentManager, "Smartphone sem adaptador bluetooth")
+
+            else if(!BluetoothHelper.verificaBluetoothHabilitado()){
+                val it = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                startActivityForResult(it, BT_ACTIVATE)
+            }
+            else
+                tornarVisivel()
+        }
+
         home.setOnClickListener {
-            val ft = fm.beginTransaction()
-            ft.replace(R.id.exibiFragment, FragmentHome(this.key))
-            ft.commit()
+            FragmentHome.build(servie, supportFragmentManager)
         }
 
         rotinas.setOnClickListener {
@@ -40,12 +60,6 @@ class PrincipalActivity : AppCompatActivity() {
             ft.replace(R.id.exibiFragment, FragmentRotina())
             ft.commit()
         }
-
-        /*perfil.setOnClickListener {
-            val ft = fm.beginTransaction()
-            ft.replace(R.id.exibiFragment, FragmentPerfil())
-            ft.commit()
-        }*/
 
         novoUsuario.setOnClickListener {
             val ft = fm.beginTransaction()
@@ -66,7 +80,7 @@ class PrincipalActivity : AppCompatActivity() {
         firebase = ConfiguracaoFirebase.getFirebase()
         helper = BD(this)
 
-        buscarUsuario()
+        //buscarUsuario()
     }
 
     private fun buscarUsuario(){
@@ -165,5 +179,27 @@ class PrincipalActivity : AppCompatActivity() {
     private fun listarBluetooth() {
         val b = BluetoothHelper(supportFragmentManager)
         b.onReceive(baseContext, intent)
+    }
+
+    private fun listarBluetoothsPareados(){
+        val c = ConexaoBluetoothProvisoria()
+        val b  = BluetoothHelper()
+        val l = b.obterDevicesPareados(this)
+
+        c.showDialog(supportFragmentManager, l)
+    }
+
+    private fun tornarVisivel(){
+        val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120)
+        startActivityForResult(discoverableIntent, BT_VISIBILITY)
+    }
+
+    override fun onBackPressed() {
+        val count = supportFragmentManager.backStackEntryCount
+        if(count == 0)
+            FragmentHome.build(servie, supportFragmentManager)
+        else
+            supportFragmentManager.popBackStack()
     }
 }

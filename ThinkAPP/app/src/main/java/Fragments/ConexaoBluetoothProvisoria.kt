@@ -1,10 +1,12 @@
 package Fragments
 
-import Activity.ComodoActivity
+import Activity.PrincipalActivity
 import Helper.BluetoothSerialService
 import android.bluetooth.BluetoothDevice
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,14 +42,24 @@ class ConexaoBluetoothProvisoria : DialogFragment(){
             val mHandlerBT = Handler()
             val mSerialService = BluetoothSerialService(activity, mHandlerBT)
 
-            (activity as ComodoActivity).servie = mSerialService
+            (activity as PrincipalActivity).servie = mSerialService
+            (activity as PrincipalActivity).state = BluetoothSerialService.STATE_CONNECTED
 
             mSerialService.connect(device)
+
+            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+            armazenaSharedPreferences(preferences)
 
             dismiss()
         }catch (e:Exception){
             ErroBD.showDialogErro(requireFragmentManager(), "Erro ao conectar bluetooth: $e")
         }
+    }
+
+    private fun armazenaSharedPreferences(sharedPreferences: SharedPreferences){
+        val editor = sharedPreferences.edit()
+        editor.putInt(BluetoothSerialService.STATE_KEY, BluetoothSerialService.STATE_CONNECTED)
+        editor.apply()
     }
 
     fun showDialog(manager: FragmentManager?, listaBluetooth: ArrayList<BluetoothDevice>) {
