@@ -46,12 +46,13 @@ def trainning(ultimo_comodo, horas, dia_semana):
 
     print(previsoes_final)
 
+    i = 0
+
     for p in previsoes_final:
-        try:
-            print(p)
-            send_command(previsoes.index(p), p)
-        except:
-            pass
+        print(i)
+        send_command(i, p)
+        i += 1
+    
 
 
 def monta_csv_previsoes(ultimo_comodo, horas, dia_semana):
