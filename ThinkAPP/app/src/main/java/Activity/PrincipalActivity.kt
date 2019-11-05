@@ -55,11 +55,11 @@ class PrincipalActivity : AppCompatActivity() {
             FragmentHome.build(servie, supportFragmentManager)
         }
 
-        rotinas.setOnClickListener {
-            val ft = fm.beginTransaction()
-            ft.replace(R.id.exibiFragment, FragmentRotina())
-            ft.commit()
-        }
+//        rotinas.setOnClickListener {
+//            val ft = fm.beginTransaction()
+//            ft.replace(R.id.exibiFragment, FragmentRotina())
+//            ft.commit()
+//        }
 
         novoUsuario.setOnClickListener {
             val ft = fm.beginTransaction()

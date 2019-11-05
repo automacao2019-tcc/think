@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime
 import pandas as pd
+from learning_home import *
 
 comodos = ['quarto_1', 'quarto_2', 'cozinha', 'sala', 'banheiro_1', 'banheiro_2', 'portao']
 
@@ -53,3 +54,6 @@ def empilha_csv(comodo, dia_semana, horas, acendeu):
 
     for row in dados:
         newCsv.writerow(row)
+    
+    if len(dados) > 50:
+        trainning(ultimo_comodo, horas, dia_semana)
