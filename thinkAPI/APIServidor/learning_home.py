@@ -26,18 +26,10 @@ def trainning(ultimo_comodo, horas, dia_semana, training):
         colunas = [tf.feature_column.numeric_column(key = c) for c in nome_colunas]
 
         #fazendo o treinamento
-        x_treinamento, x_teste, y_treinamento, y_teste = 
-        train_test_split(x, y, test_size = 0.3)
-
-        funcao_treinamento = tf.estimator.inputs.pandas_input_fn(
-        x = x_treinamento, y = y_treinamento, batch_size = 32, 
-        num_epochs = None, shuffle = True)
-
-        classificador = tf.estimator.LinearClassifier(feature_columns
-         = colunas)
-        #fazendo efetivamente o treinamento ... 
-        #steps = 10000 significa que ele 
-        #vai rodar um loop 10000 vezes treinando a rede
+        x_treinamento, x_teste, y_treinamento, y_teste = train_test_split(x, y, test_size = 0.3)
+        funcao_treinamento = tf.estimator.inputs.pandas_input_fn(x = x_treinamento, y = y_treinamento, batch_size = 32, num_epochs = None, shuffle = True)
+        classificador = tf.estimator.LinearClassifier(feature_columns = colunas)
+        #fazendo efetivamente o treinamento ... steps = 10000 significa que ele vai rodar um loop 10000 vezes treinando a rede
         classificador.train(input_fn = funcao_treinamento, steps = 10000)
 
         monta_csv_previsoes(ultimo_comodo, horas, dia_semana, None)
