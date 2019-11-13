@@ -55,5 +55,8 @@ def empilha_csv(comodo, dia_semana, horas, acendeu):
     for row in dados:
         newCsv.writerow(row)
     
-    if len(dados) > 50:
-        trainning(ultimo_comodo, horas, dia_semana)
+    csv_file.close()
+    rotina.close()
+
+    training =  len(dados) > 50
+    trainning(ultimo_comodo, horas, dia_semana, training)
