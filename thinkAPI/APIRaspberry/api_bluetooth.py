@@ -26,10 +26,15 @@ while True:
     if data is not None:
         print(data)
         
-        #PRIMEIRO LED
+        #corredor
         if data == b'apaga_corredor':
             acende_apaga('corredor', 0)
         elif data == b'acende_corredor':
+            acende_apaga('corredor', 1)
+            
+        if data == b'fechar_portao':
+            acende_apaga('corredor', 0)
+        elif data == b'abrir_portao':
             acende_apaga('corredor', 1)
            
         #SEGUNDO LED

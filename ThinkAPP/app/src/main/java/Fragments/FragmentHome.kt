@@ -62,6 +62,14 @@ class FragmentHome: Fragment() {
         comodo_banheiro_2.setOnClickListener {
             abriComodo(comodoHelper.BANHEIRO.name, true)
         }
+
+        comodo_area.setOnClickListener {
+            abriComodo(comodoHelper.AREA.name, false)
+        }
+
+        comodo_corredor.setOnClickListener {
+            abriComodo(comodoHelper.CORREDOR.name, false)
+        }
     }
 
     private fun abriComodo(comodo: String, isSecond : Boolean){

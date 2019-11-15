@@ -14,8 +14,10 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import br.com.ggslmrs.think.R
+import kotlinx.android.synthetic.main.activity_area.*
 import kotlinx.android.synthetic.main.activity_banheiro.*
 import kotlinx.android.synthetic.main.activity_comodo.*
+import kotlinx.android.synthetic.main.activity_corredor.*
 import kotlinx.android.synthetic.main.activity_cozinha.*
 import kotlinx.android.synthetic.main.activity_sala.*
 import java.lang.Exception
@@ -37,6 +39,8 @@ class ComodoActivity : Fragment(), BluetoothListener {
             comodoHelper.QUARTO.name -> layout = R.layout.activity_comodo
             comodoHelper.SALA.name -> layout = R.layout.activity_sala
             comodoHelper.BANHEIRO.name -> layout = R.layout.activity_banheiro
+            comodoHelper.AREA.name -> layout = R.layout.activity_area
+            comodoHelper.CORREDOR.name -> layout = R.layout.activity_corredor
         }
         if(layout != 0)
             return inflater.inflate(layout, container, false)
@@ -102,6 +106,26 @@ class ComodoActivity : Fragment(), BluetoothListener {
                         mandarMensagem("apaga_banheiro_2")
                     else
                         mandarMensagem("apaga_banheiro")
+                }
+            }
+
+            comodoHelper.AREA.name -> {
+                abrir_porrtao.setOnClickListener {
+                    mandarMensagem("abrir_portao")
+                }
+
+                fechar_porrtao.setOnClickListener {
+                    mandarMensagem("fechar_portao")
+                }
+            }
+
+            comodoHelper.CORREDOR.name -> {
+                acende_luz_corredor.setOnClickListener {
+                    mandarMensagem("acende_corredor")
+                }
+
+                apaga_luz_corredor.setOnClickListener {
+                    mandarMensagem("apaga_corredor")
                 }
             }
         }

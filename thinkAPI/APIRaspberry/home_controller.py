@@ -11,6 +11,7 @@ GPIO.setup(8,  GPIO.OUT)
 GPIO.setup(13, GPIO.OUT)
 GPIO.setup(25, GPIO.OUT)
 GPIO.setup(26, GPIO.OUT)
+GPIO.setup(19, GPIO.OUT)
 
 GPIO.output(1,  GPIO.HIGH)
 GPIO.output(6,  GPIO.HIGH)
@@ -33,13 +34,24 @@ def send_command(comodo, acendeu):
     print(response.status_code)
 
 def acende_apaga(comodo, acendeu):
-    if comodo == b'apaga_corredor':
+    if comodo == b'corredor' and acendeu == 0:
         print("CORREDOR - OFF")
         GPIO.output(26, GPIO.HIGH)
-    elif comodo == b'acende_corredor':
+        send_command('corredor', 0)
+    elif comodo == b'corredor' and acendeu == 1:
         print("CORREDOR - ON")
         GPIO.output(26, GPIO.LOW)
-       
+        send_command('corredor', 1)
+    
+    if comodo == b'portao' and acendeu == 0:
+        print("CORREDOR - OFF")
+        GPIO.output(26, GPIO.HIGH)
+        send_command('portao', 0)
+    elif comodo == b'portao' and acendeu == 1:
+        print("CORREDOR - ON")
+        GPIO.output(26, GPIO.LOW)
+        send_command('portao', 1)
+    
     #SEGUNDO LED
     if comodo == 'banheiro_1' and acendeu == 0:
         print("BANHEIRO - OFF")

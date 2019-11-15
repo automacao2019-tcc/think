@@ -5,6 +5,6 @@ enum class comodoHelper {
     SALA,
     COZINHA,
     AREA,
-    COPA,
-    BANHEIRO
+    BANHEIRO,
+    CORREDOR
 }

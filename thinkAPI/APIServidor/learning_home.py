@@ -9,97 +9,71 @@ import pandas as pd
 import requests
 
 ip_rasp = '192.168.1.150'
-comodos = ['quarto_1', 'quarto_2', 'cozinha', 'sala', 'banheiro_1', 'banheiro_2', 'portao']
+comodos = ['quarto_1', 'quarto_2', 'cozinha', 'sala', 'banheiro_1', 'banheiro_2', 'portao', 'corredor']
 
-def trainning(ultimo_comodo, horas, dia_semana, training):
-    if training:
-        #lendo o arquivo csv com as rotinas
-        base = pd.read_csv('rotina.csv')
+def trainning(ultimo_comodo, horas, dia_semana):
+    #lendo o arquivo csv com as rotinas
+    base = pd.read_csv('rotina.csv')
 
-        #a variavel x vai contar todas as colunas do csv com exceção da coluna 'resultado' 
-        x = base.drop('resultado', axis = 1)
+    #a variavel x vai contar todas as colunas do csv com exceção da coluna 'resultado' 
+    x = base.drop('resultado', axis = 1)
 
-        #a variavel y vai conter a coluna 'resultado'
-        y = base['resultado']
+    #a variavel y vai conter a coluna 'resultado'
+    y = base['resultado']
 
-        nome_colunas =  ['de', 'para',	'hora',	'diaSemana']
-        colunas = [tf.feature_column.numeric_column(key = c) for c in nome_colunas]
+    nome_colunas =  ['de', 'para',	'hora',	'diaSemana']
+    colunas = [tf.feature_column.numeric_column(key = c) for c in nome_colunas]
 
-        #fazendo o treinamento
-        x_treinamento, x_teste, y_treinamento, y_teste = train_test_split(x, y, test_size = 0.3)
-        funcao_treinamento = tf.estimator.inputs.pandas_input_fn(x = x_treinamento, y = y_treinamento, batch_size = 32, num_epochs = None, shuffle = True)
-        classificador = tf.estimator.LinearClassifier(feature_columns = colunas)
-        #fazendo efetivamente o treinamento ... steps = 10000 significa que ele vai rodar um loop 10000 vezes treinando a rede
-        classificador.train(input_fn = funcao_treinamento, steps = 10000)
+    #fazendo o treinamento
+    x_treinamento, x_teste, y_treinamento, y_teste = train_test_split(x, y, test_size = 0.3)
+    funcao_treinamento = tf.estimator.inputs.pandas_input_fn(x = x_treinamento, y = y_treinamento, batch_size = 32, num_epochs = None, shuffle = True)
+    classificador = tf.estimator.LinearClassifier(feature_columns = colunas)
+    #fazendo efetivamente o treinamento ... steps = 10000 significa que ele vai rodar um loop 10000 vezes treinando a rede
+    classificador.train(input_fn = funcao_treinamento, steps = 10000)
 
-        monta_csv_previsoes(ultimo_comodo, horas, dia_semana, None)
+    monta_csv_previsoes(ultimo_comodo, horas, dia_semana)
 
-        x_for_predicts = pd.read_csv('previsao.csv')
+    base = pd.read_csv('previsao.csv')
+    x_for_predicts = base
 
-        #fazendo previsoes
-        funcao_previsao = tf.estimator.inputs.pandas_input_fn(x = x_for_predicts, batch_size = 32, shuffle = True)
+    #fazendo previsoes
+    funcao_previsao = tf.estimator.inputs.pandas_input_fn(x = x_for_predicts, batch_size = 32, shuffle = True)
 
-        previsoes_final = []
-        for p in classificador.predict(input_fn = funcao_previsao):
-            previsoes_final.append(p['class_ids'])
+    previsoes_final = []
+    for p in classificador.predict(input_fn = funcao_previsao):
+        previsoes_final.append(p['class_ids'])
 
-        print(previsoes_final)
-        print(len(previsoes_final))
-        
-        monta_csv_previsoes(ultimo_comodo, horas, dia_semana, previsoes_final)
-
-        send_command(x_for_predicts, ultimo_comodo)
     
-    else:
-        base = pd.read_csv('previsao.csv')
-        
-        if base is not None:
-            send_command(base, ultimo_comodo)
+    print(previsoes_final)
+
+    i = 0
+    for p in previsoes_final:
+        print('send: %s' %(p))
+        send_command(i, p)
+        i += 1    
 
 
-def monta_csv_previsoes(ultimo_comodo, horas, dia_semana, previsoes):
-    list_predicts = []
-
-    if previsoes is not None:
-        list_predicts = previsoes
-    else:
-        for i in range(0, 36):
-            list_predicts[i] = 0
-        
+def monta_csv_previsoes(ultimo_comodo, horas, dia_semana):
     #gerando csv de previsao
     nome = 'previsao.csv'
     csv_file = open(nome, 'w')
     newCsv = csv.writer(csv_file)
 
     #colunas
-    row = ['de', 'para', 'hora',	'diaSemana', 'acende']
+    row = ['de', 'para',	'hora',	'diaSemana']
     newCsv.writerow(row)
 
-    increment = 0
+    for i in range(0, 7):
+        row = [ultimo_comodo, i, horas, dia_semana]
+        newCsv.writerow(row)
 
-    for i in range(0, 6):
-        for x in range(0, 6):
-            row = [i, x, horas, dia_semana, list_predicts[increment]]
-            newCsv.writerow(row)        
-            increment = increment + 1
 
-def send_command(base, ultimo_comodo):
+def send_command(comodo_number, acendeu):
+    acende_apaga = 'acende'
+    if acendeu == 0:
+        acende_apaga = 'apaga'
 
-    previsoes_final = []
+    comodo = comodos[comodo_number]
 
-    for b in base:
-        if b[0] == ultimo_comodo:
-            previsoes_final.append(b[4])
-
-    i = 0
-    
-    while i < len(previsoes_final):
-        acende_apaga = 'acende'
-        if previsoes_final[i][0] == 0:
-            acende_apaga = 'apaga'
-
-        comodo = comodos[i]
-        url = 'http://%s:5000/%s_casa/%s' %(ip_rasp, acende_apaga, comodo)
-        requests.put(url)
-
-        i = i+1
+    url = 'http://%s:5000/%s_casa/%s' %(ip_rasp, acende_apaga, comodo)
+    requests.put(url)

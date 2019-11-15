@@ -4,7 +4,8 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/drawable_gradiente">
+        android:background="@drawable/drawable_gradiente"
+        >
 
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -24,7 +25,7 @@
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Área"
+                    android:text="Corredor"
                     android:gravity="center"
                     android:textSize="30sp"
                     />
@@ -71,13 +72,13 @@
                             <ImageView
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
-                                    android:src="@drawable/lock"
+                                    android:src="@drawable/lampadacolorida"
                                     />
 
                             <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Portão"
+                                    android:text="Luz"
                                     />
                         </LinearLayout>
 
@@ -91,19 +92,19 @@
                             <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Abrir"
+                                    android:text="Acender"
                                     android:layout_margin="5dp"
                                     android:textColor="@color/textviewlink"
-                                    android:id="@+id/abrir_porrtao"
+                                    android:id="@+id/acende_luz_corredor"
                                     />
 
                             <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Fechar"
+                                    android:text="Apagar"
                                     android:layout_margin="5dp"
                                     android:textColor="@color/textviewlink"
-                                    android:id="@+id/fechar_porrtao"
+                                    android:id="@+id/apaga_luz_corredor"
                                     />
                         </LinearLayout>
 

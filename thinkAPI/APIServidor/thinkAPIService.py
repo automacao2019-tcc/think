@@ -3,7 +3,7 @@ from datetime import datetime
 import pandas as pd
 from learning_home import *
 
-comodos = ['quarto_1', 'quarto_2', 'cozinha', 'sala', 'banheiro_1', 'banheiro_2', 'portao']
+comodos = ['quarto_1', 'quarto_2', 'cozinha', 'sala', 'banheiro_1', 'banheiro_2', 'portao', 'corredor']
 
 def hour_to_minute(horas, minutos):
     return horas * 60 + minutos
@@ -28,13 +28,6 @@ def acende_apaga(comodo, acendeu):
     
     empilha_csv(comodo_nmr, dia_semana, minutos, acendeu)
 
-def getCsv():
-    with open('rotina.csv', 'r') as csvfile:
-        reader = csv.reader(csvfile)
-        return reader
-    
-    return None
-
 def empilha_csv(comodo, dia_semana, horas, acendeu):
     rotina = open('rotina.csv', 'r')
     reader = csv.reader(rotina)
@@ -44,7 +37,10 @@ def empilha_csv(comodo, dia_semana, horas, acendeu):
     for row in reader:
         dados.append(row)
 
-    ultimo_comodo = dados[len(dados) - 1][1]
+    if len(dados) < 2:
+        ultimo_comodo = 6
+    else:
+        ultimo_comodo = dados[len(dados) - 1][1]
 
     dados.append([ultimo_comodo, comodo, horas, dia_semana, acendeu])
 
@@ -55,8 +51,8 @@ def empilha_csv(comodo, dia_semana, horas, acendeu):
     for row in dados:
         newCsv.writerow(row)
     
-    csv_file.close()
     rotina.close()
+    csv_file.close()
 
-    training =  len(dados) > 50
-    trainning(ultimo_comodo, horas, dia_semana, training)
+    if len(dados) > 20:
+        trainning(comodo, horas, dia_semana)
