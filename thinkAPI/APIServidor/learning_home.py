@@ -21,8 +21,38 @@ def trainning(ultimo_comodo, horas, dia_semana):
         #a variavel y vai conter a coluna 'resultado'
         y = base['resultado']
 
-        nome_colunas =  ['de', 'para',	'hora',	'diaSemana']
-        colunas = [tf.feature_column.numeric_column(key = c) for c in nome_colunas]
+        #categorizando as horas
+        hora = tf.feature_column.numeric_column('hora')
+        hora_categorica = [tf.feature_column.bucketized_column(hora, boundaries=[
+        0,
+        60,
+        120,
+        180,
+        240,
+        300,
+        360,
+        420,
+        480,
+        540,
+        600,
+        660,
+        720,
+        780,
+        840,
+        900,
+        960,
+        1020,
+        1080,
+        1140,
+        1200,
+        1260,
+        1320,
+        1380,])]
+
+        nome_colunas =  ['de', 'para',	'diaSemana']
+        colunas_categoricas = [tf.feature_column.categorical_column_with_vocabulary_list(key = c, vocabulary_list = x[c].unique()) for c in nome_colunas]
+
+        colunas = colunas_categoricas + hora_categorica
 
         #fazendo o treinamento
         x_treinamento, x_teste, y_treinamento, y_teste = train_test_split(x, y, test_size = 0.3)
