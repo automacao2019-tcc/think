@@ -33,9 +33,9 @@ while True:
             acende_apaga('corredor', 1, True)
             
         if data == b'fechar_portao':
-            acende_apaga('corredor', 0, True)
+            acende_apaga('portao', 0, True)
         elif data == b'abrir_portao':
-            acende_apaga('corredor', 1, True)
+            acende_apaga('portao', 1, True)
            
         #SEGUNDO LED
         if data == b'apaga_banheiro':
