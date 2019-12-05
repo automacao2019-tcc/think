@@ -8,7 +8,7 @@ import pandas as pd
 #pip install requests
 import requests
 
-ip_rasp = '192.168.1.196'
+ip_rasp = '192.168.1.195'
 comodos = ['quarto_1', 'quarto_2', 'cozinha', 'sala', 'banheiro_1', 'banheiro_2', 'portao', 'corredor']
 
 def trainning(ultimo_comodo, horas, dia_semana):
@@ -56,7 +56,7 @@ def trainning(ultimo_comodo, horas, dia_semana):
 
         #fazendo o treinamento
         x_treinamento, x_teste, y_treinamento, y_teste = train_test_split(x, y, test_size = 0.3)
-        funcao_treinamento = tf.estimator.inputs.pandas_input_fn(x = x_treinamento, y = y_treinamento, batch_size = 32, num_epochs = None, shuffle = True)
+        funcao_treinamento = tf.compat.v1.estimator.inputs.pandas_input_fn(x = x_treinamento, y = y_treinamento, batch_size = 32, num_epochs = None, shuffle = True)
         classificador = tf.estimator.LinearClassifier(feature_columns = colunas)
         #fazendo efetivamente o treinamento ... steps = 5000 significa que ele vai rodar um loop 5000 vezes treinando a rede
         classificador.train(input_fn = funcao_treinamento, steps = 5000)
@@ -67,7 +67,7 @@ def trainning(ultimo_comodo, horas, dia_semana):
         x_for_predicts = base
 
         #fazendo previsoes
-        funcao_previsao = tf.estimator.inputs.pandas_input_fn(x = x_for_predicts, batch_size = 32, shuffle = True)
+        funcao_previsao = tf.compat.v1.estimator.inputs.pandas_input_fn(x = x_for_predicts, batch_size = 32, shuffle = True)
 
         previsoes_final = []
         for p in classificador.predict(input_fn = funcao_previsao):
